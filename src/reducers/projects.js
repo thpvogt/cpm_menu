@@ -9,21 +9,28 @@ const initialState = {
       id: 1,
       name: 'First Activity',
       duration: 0,
+      next: [],
     },
   ],
 };
 
 const addNewActivity = (state) => {
   const newState = { ...state };
-  newState.activities.push({ id: state.lastIndex, name: '', duration: 0 });
   newState.lastIndex = state.lastIndex + 1;
+  newState.activities.push({
+    id: newState.lastIndex,
+    name: '',
+    duration: 0,
+    next: [],
+  });
   return newState;
 };
 
 const editActivity = (activities, edit) => {
   const editedActivity = activities.find(activity => activity.id === edit.activityId);
   const editedIndex = activities.indexOf(editedActivity);
-  editedActivity[edit.field] = edit.value;
+  const { value } = edit.event.target;
+  editedActivity[edit.attributeName] = edit.attributeName === 'next' ? value.split(',') : value;
   return activities.splice(editedIndex, 1, editedActivity);
 };
 

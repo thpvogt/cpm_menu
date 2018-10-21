@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Router, Route, hashHistory } from 'react-router';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import App from './App';
+import store from './config/store';
+import { FormPage } from './pages/Form';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-  <Router history={hashHistory}>
-    <Route path="/" component={App} />
-  </Router>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <Route path="/" component={FormPage} />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root'),
 );
 registerServiceWorker();

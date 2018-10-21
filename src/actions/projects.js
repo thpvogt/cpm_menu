@@ -5,7 +5,7 @@ export const addActivity = () => ({
   type: ADD_ACTIVITY,
 });
 
-export const editActivity = activityChange => ({
+export const editActivity = edit => ({
   type: EDIT_ACTIVITY,
-  activityChange,
+  edit,
 });

@@ -1,48 +1,63 @@
 import React, { Component } from 'react';
-import { ProjectRow } from '../../components/TableRow';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { ActivityRow } from '../../components/TableRow';
+import { addActivity, editActivity } from '../../actions/projects';
 
 class FormPage extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    activities: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        duration: PropTypes.number,
+        next: PropTypes.arrayOf(PropTypes.number),
+      }),
+    ).isRequired,
+  };
 
-    this.state = {
-      projects: [
-        {
-          id: 1,
-          name: 'Test',
-          duration: 0,
-          next: [],
-        },
-      ],
-    };
-  }
-
-  inputChanged = (project, event, attributeName) => {
-    const updatedProject = this.state.projects.splice(this.state.projects.indexOf(project));
-    updatedProject[attributeName] = event.target.value;
-    this.setState({ projects: this.state.projects.push(updatedProject) });
+  inputChanged = (activityId, event, attributeName) => {
+    this.props.dispatch(editActivity({ activityId, event, attributeName }));
+    // const { activities } = this.props;
+    // const updatedProject = activities.splice(activities.indexOf(project));
+    // updatedProject[attributeName] = event.target.value;
   };
 
   render() {
-    const rows = this.state.projects;
+    const { activities } = this.props;
     return (
       <div>
+        <h1>Camilichi Hermosa</h1>
         <table>
           <thead>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Duración</th>
-            <th>Siguientes</th>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Duración</th>
+              <th>Siguientes</th>
+            </tr>
           </thead>
           <tbody>
-            {rows.forEach(project => (
-              <ProjectRow project={project} />
+            {activities.map(activity => (
+              <ActivityRow activity={activity} inputChanged={this.inputChanged} key={activity.id} />
             ))}
           </tbody>
         </table>
+        <button type="button" onClick={() => this.props.dispatch(addActivity())}>
+          Add
+        </button>
       </div>
     );
   }
 }
 
-export default FormPage;
+const mapStateToProps = (state) => {
+  const { activities } = state.projects;
+  console.log(state);
+  return {
+    activities,
+  };
+};
+
+export default connect(mapStateToProps)(FormPage);

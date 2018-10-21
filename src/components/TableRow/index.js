@@ -1,3 +1,3 @@
-import ProjectRow from './ProjectRow';
+import ActivityRow from './ActivityRow';
 
-export {ProjectRow};
+export { ActivityRow };
